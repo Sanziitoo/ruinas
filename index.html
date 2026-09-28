@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruínas</title>
+    
+    <!-- Fontes Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+
+    <!-- CSS Separado na pasta css/ -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Áudios -->
+    <audio id="bg-music" src="audio/musicadefundo.mp3" loop></audio>
+    <audio id="final-audio" src="audio/aurelius.mp3"></audio>
+
+    <!-- Ecrã Inicial -->
+    <div id="start-screen">
+        <button id="start-btn">Adentrar</button>
+    </div>
+
+    <!-- Contentor Principal -->
+    <div id="enigma-container" class="hidden">
+        
+        <!-- Torre Geométrica Estilizada com Camadas e Órbitas Concêntricas[cite: 4] -->
+        <div class="tree-base">
+            <svg width="400" height="360" viewBox="0 0 400 360" class="complex-tree" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="pyramidGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#ff3333" />
+                        <stop offset="100%" stop-color="#cc1111" />
+                    </linearGradient>
+                    <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur stdDeviation="6" result="blur" />
+                        <feMerge>
+                            <feMergeNode in="blur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+
+                <!-- Círculos Concêntricos de Fundo (Órbitas / HUD)[cite: 4] -->
+                <g class="bg-orbits" opacity="0.25">
+                    <circle cx="200" cy="180" r="160" fill="none" stroke="#ff3333" stroke-width="1" stroke-dasharray="3,6"/>
+                    <circle cx="200" cy="180" r="120" fill="none" stroke="#ff3333" stroke-width="0.8" stroke-dasharray="2,4"/>
+                    <circle cx="200" cy="180" r="80" fill="none" stroke="#ff3333" stroke-width="0.5" stroke-dasharray="4,4"/>
+                </g>
+
+                <g filter="url(#neonGlow)">
+                    <!-- Nível do Topo (Ápice) -->
+                    <polygon points="200,60 215,85 185,85" fill="url(#pyramidGrad)" stroke="#ffffff" stroke-width="1.2"/>
+                    
+                    <!-- Nível 5 -->
+                    <polygon points="182,90 218,90 225,115 175,115" fill="url(#pyramidGrad)" stroke="#ffffff" stroke-width="1.2"/>
+                    
+                    <!-- Nível 4 -->
+                    <polygon points="172,120 228,120 236,150 164,150" fill="url(#pyramidGrad)" stroke="#ffffff" stroke-width="1.2"/>
+                    
+                    <!-- Nível 3 -->
+                    <polygon points="161,155 239,155 248,188 152,188" fill="url(#pyramidGrad)" stroke="#ffffff" stroke-width="1.2"/>
+                    
+                    <!-- Nível 2 -->
+                    <polygon points="149,193 251,193 261,228 139,228" fill="url(#pyramidGrad)" stroke="#ffffff" stroke-width="1.2"/>
+                    
+                    <!-- Nível 1 (Base) -->
+                    <polygon points="136,233 264,233 275,270 125,270" fill="url(#pyramidGrad)" stroke="#ffffff" stroke-width="1.5"/>
+
+                    <!-- Linhas divisórias escuras para demarcação exata das camadas -->
+                    <line x1="185" y1="88" x2="215" y2="88" stroke="#030101" stroke-width="2"/>
+                    <line x1="175" y1="118" x2="225" y2="118" stroke="#030101" stroke-width="2"/>
+                    <line x1="164" y1="153" x2="236" y2="153" stroke="#030101" stroke-width="2"/>
+                    <line x1="152" y1="191" x2="248" y2="191" stroke="#030101" stroke-width="2"/>
+                    <line x1="139" y1="231" x2="261" y2="231" stroke="#030101" stroke-width="2"/>
+
+                    <!-- Caminho em Espiral Pontilhado Escalando a Torre[cite: 4] -->
+                    <path d="M 145,255 C 190,265 240,240 225,210 C 210,180 160,195 175,160 C 190,125 240,135 220,100 C 205,75 198,72 200,68" 
+                          fill="none" stroke="#ffffff" stroke-width="1.8" stroke-dasharray="2,6" stroke-linecap="round" opacity="0.95"/>
+                </g>
+            </svg>
+            <div class="ground-line"></div>
+        </div>
+
+        <div id="tree">
+            <!-- As perguntas aparecem dinamicamente -->
+        </div>
+
+        <!-- Player de Áudio Luxuoso / Gótico Refinado -->
+        <div id="custom-player" class="hidden">
+            <div class="player-ornament-top"></div>
+            <div class="player-header">
+                <span class="player-eyebrow">Relíquia Sonora</span>
+                <span class="player-title">O Canto de Ódio</span>
+            </div>
+
+            <div class="player-body">
+                <button id="play-pause-btn" aria-label="Play/Pause">
+                    <svg class="icon-play" viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20" fill="currentColor"/></svg>
+                    <svg class="icon-pause hidden" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" fill="currentColor"/><rect x="14" y="4" width="4" height="16" fill="currentColor"/></svg>
+                </button>
+
+                <div class="player-track-info">
+                    <div class="seek-wrapper">
+                        <input type="range" id="seek-bar" value="0" min="0" max="100" step="0.1">
+                    </div>
+                    <div class="time-display-row">
+                        <span id="current-time">0:00</span>
+                        <span id="duration-time">0:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="player-footer">
+                <div class="volume-box">
+                    <span class="vol-icon">VOL</span>
+                    <input type="range" id="volume-bar" min="0" max="1" step="0.01" value="0.8">
+                </div>
+            </div>
+            <div class="player-ornament-bottom"></div>
+        </div>
+
+    </div>
+
+    <!-- JavaScript Separado na pasta js/ -->
+    <script src="js/script.js"></script>
+</body>
+</html>
